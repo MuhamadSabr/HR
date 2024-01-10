@@ -6,48 +6,54 @@ import com.mmd.hr.entity.Country;
 import com.mmd.hr.entity.Department;
 import com.mmd.hr.entity.Employee;
 import com.mmd.hr.entity.Job;
+import com.mmd.hr.reposiroty.CountryRepository;
+import com.mmd.hr.reposiroty.DepartmentRepository;
+import com.mmd.hr.reposiroty.EmployeeRepository;
+import com.mmd.hr.reposiroty.JobRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface EmployeeService {
+@Repository
+public class EmployeeService {
 
-	List<Employee> findAllEmployees();
+	//Declaration of all repositories for Constructor Dependency Injection.
+	private final EmployeeRepository employeeRepository;
 
-	List<Job> findAllJobs();
+	public EmployeeService(EmployeeRepository employeeRepository){
+		this.employeeRepository = employeeRepository;
+	}
 
-	List<Department> findAllDepartments();
 
-	List<Country> findAllCountries();
+	public List<Employee> findAllEmployees() {
+		return employeeRepository.findAll();
+	}
 
-	void save(Employee employee);
 
-	void delete(Employee employee);
 
-	Optional<Employee> findEmployeeById(int employeeId);
+	@Transactional
+	public void save(Employee employee) {
+		employeeRepository.save(employee);
+	}
 
-	Employee findEmployeeWithAddress(int employeeId);
+	@Transactional
+	public void delete(Employee employee) {
+		employeeRepository.delete(employee);
+	}
 
-	Integer getDepartmentIdByName(String departmentName);
+	public Optional<Employee> findEmployeeById(int employeeId){
+		 return employeeRepository.findById(employeeId);
+	}
 
-	String getDepartmentNameById(int departmentId);
+	public Employee findEmployeeWithAddress(int employeeId) {return employeeRepository.findEmployeeByEmployeeIdWithAddress(employeeId);}
 
-	String getCountryIdByName(String countryName);
+	public List<Integer> findAllEmployeesId() {
+		return employeeRepository.findAllEmployeesId();
+	}
 
-	String getCountryNameById(String countryId);
-
-	String getJobIdByJobTitle(String jobTitle);
-
-	String getJobTitleById(String jobId);
-
-	List<CountryAndJobDTO> getCountryIdAndName();
-
-	List<DepartmentDTO> getDepartmentIdAndName();
-
-	List<CountryAndJobDTO> getJobIdAndName();
-
-	List<Integer> findAllEmployeesId();
-
-	List<String> findAllEmails();
-
+	public List<String> findAllEmails() {
+		return employeeRepository.findAllEmails();
+	}
 }

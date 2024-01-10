@@ -4,18 +4,18 @@ import com.mmd.hr.dto.CountryAndJobDTO;
 import com.mmd.hr.dto.DepartmentDTO;
 import com.mmd.hr.dto.EmployeeFormData;
 import com.mmd.hr.entity.Employee;
+import com.mmd.hr.service.CountryService;
+import com.mmd.hr.service.DepartmentService;
 import com.mmd.hr.service.EmployeeService;
+import com.mmd.hr.service.JobService;
 import com.mmd.hr.util.Gender;
 import com.mmd.hr.util.MaritalStatus;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.time.LocalDate;
@@ -38,7 +38,10 @@ public class EmployeeController {
 
 
 	//Declaration of services
-	private final EmployeeService employeeService;
+	private EmployeeService employeeService;
+	private JobService jobService;
+	private DepartmentService departmentService;
+	private CountryService countryService;
 
 
 
@@ -63,12 +66,12 @@ public class EmployeeController {
 	private String jobTitle;
 
 
-	public EmployeeController(EmployeeService employeeService){
+	public EmployeeController(EmployeeService employeeService, DepartmentService departmentService, JobService jobService, CountryService countryService){
 		this.employeeService = employeeService;
 
-		departmentById = employeeService.getDepartmentIdAndName();
-		countryById	   = employeeService.getCountryIdAndName();
-		jobById        = employeeService.getJobIdAndName();
+		departmentById = departmentService.getDepartmentIdAndName();
+		countryById	   = countryService.getCountryIdAndName();
+		jobById        = jobService.getJobIdAndName();
 
 		departmentsList = departmentById.stream().map(DepartmentDTO::getValue).toList();
 		countriesList   = countryById.stream().map(CountryAndJobDTO::getValue).toList();
@@ -84,41 +87,30 @@ public class EmployeeController {
 
 
 	@GetMapping("/")
-	public String getEmployees(Model model){
-
-		//We want to display the list of employees sorted by last name
+	public String getEmployees(Model model, HttpServletRequest request){
 		List<Employee> employees = employeeService.findAllEmployees();
 		employees.sort(Comparator.comparing(Employee::getLastName));
-
 		model.addAttribute("employeesList", employees);
-
+		model.addAttribute("currentURI", "/"+request.getRequestURI().split("/")[1]+"/");
 		return employeesView;
 	}
 
 
 	@GetMapping("/showEmployeeForm")
-	public String showEmployeeForm(Model model){
-
-
+	public String showEmployeeForm(Model model, HttpServletRequest request){
 		model.addAttribute("employeeFormData", new EmployeeFormData());
-
 		model.addAttribute("maritalStatusList", maritalStatusList);
-
 		model.addAttribute("employeesListOfIds", employeesListOfId);
-
 		model.addAttribute("jobsList", jobsList);
-
 		model.addAttribute("departmentsList", departmentsList);
-
 		model.addAttribute("countriesList", countriesList);
-
 		model.addAttribute("employeeHireDate", LocalDate.now());
-
+		model.addAttribute("currentURI", "/"+request.getRequestURI().split("/")[1]+"/");
 		return employeeFormView;
 	}
 
 	@GetMapping("/showUpdateForm")
-	String showUpdateForm(Model model, @RequestParam("employeeId") int employeeId){
+	String showUpdateForm(Model model, HttpServletRequest request,  @RequestParam("employeeId") int employeeId){
 
 		Employee employee = employeeService.findEmployeeWithAddress(employeeId);
 
@@ -127,55 +119,39 @@ public class EmployeeController {
 			if(jobId.equals(job.getKey()))
 				jobTitle = job.getValue();
 		});
-
 		departmentId = employee.getDepartmentId();
 		departmentById.forEach(dep-> {
 			if(dep.getKey()==departmentId)
 				departmentName = dep.getValue();
 		});
-
 		countryId = employee.getAddress().getCountryId();
 		countryById.forEach(country->{
 			if(country.getKey().equals(countryId))
 				countryName = country.getValue();
 		});
 
-
 		model.addAttribute("employeeFormData", new EmployeeFormData(employee, jobTitle, departmentName, countryId));
-
 		model.addAttribute("maritalStatusList", maritalStatusList);
-
 		model.addAttribute("employeeCountryName", countryName);
-
 		model.addAttribute("employeeDepartmentName", departmentName);
-
 		model.addAttribute("employeeJobTitle", jobTitle);
-
 		model.addAttribute("employeeHireDate", employee.getHireDate());
-
 		model.addAttribute("jobsList", jobsList);
-
 		model.addAttribute("departmentsList", departmentsList);
-
 		model.addAttribute("countriesList", countriesList);
-
 		model.addAttribute("employeesListOfIds", employeesListOfId);
-
+		model.addAttribute("currentURI", "/"+request.getRequestURI().split("/")[1]+"/");
 		return employeeFormView;
 	}
 
 	@PostMapping(value = "/saveEmployee")
 	public String saveEmployee(@Valid @ModelAttribute("employeeFormData") EmployeeFormData employeeFormData, BindingResult bindingResult, Model model,
-							   @RequestParam("countryName") String countryNameL){
-
-
+							   @RequestParam("countryName") String countryName, HttpServletRequest request){
 
 		model.addAttribute("bindingResult: ", bindingResult);
-
 		if(bindingResult.hasErrors()){
-
 			model.addAttribute("maritalStatusList", maritalStatusList);
-			model.addAttribute("employeeCountryName", countryNameL);
+			model.addAttribute("employeeCountryName", countryName);
 			model.addAttribute("employeeDepartmentName", employeeFormData.getDepartmentName());
 			model.addAttribute("employeeJobTitle", employeeFormData.getJobTitle());
 			model.addAttribute("employeeHireDate", employeeFormData.getHireDate());
@@ -191,48 +167,33 @@ public class EmployeeController {
 			if(jobTitle.equals(job.getValue()))
 				jobId = job.getKey();
 		});
-
 		departmentName = employeeFormData.getDepartmentName();
 		departmentById.forEach(dep-> {
 			if(dep.getValue().equals(departmentName) )
 				departmentId = dep.getKey();
 		});
-
-
 		countryById.forEach(country->{
-			if(country.getValue().equals(countryNameL))
+			if(country.getValue().equals(countryName))
 				countryId = country.getKey();
 		});
 
-
 		Employee employee = new Employee(employeeFormData, jobId, departmentId, countryId);
-
-
 		employeeService.save(employee);
-
 		return redirectToEmployeesListPage;
 	}
 
 	@DeleteMapping("/delete")
-	public String delete(@RequestParam("employeeId") int employeeId, RedirectAttributes redirectAttributes){
-
+	public String delete(@RequestParam("employeeId") int employeeId, HttpServletRequest request){
 		Optional<Employee> employee = employeeService.findEmployeeById(employeeId);
-
 		employee.ifPresent(employeeService::delete);
-
-		redirectAttributes.addFlashAttribute("deletedUserName", employee.get().getFirstName()+" " + employee.get().getLastName());
-
 		return redirectToEmployeesListPage;
-
 	}
 
 	@GetMapping("/showAddress")
-	public String showAddress( @RequestParam("employeeId") int employeeId,  Model model){
-
+	public String showAddress(@RequestParam("employeeId") int employeeId,  Model model, HttpServletRequest request){
 		Employee employee = employeeService.findEmployeeById(employeeId).get();
-
 		model.addAttribute("employeeAddress", employee.getAddress());
-
+		model.addAttribute("currentURI", "/"+request.getRequestURI().split("/")[1]+"/");
 		return employeeAddressView;
 	}
 

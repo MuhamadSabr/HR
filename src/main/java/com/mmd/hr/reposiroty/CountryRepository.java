@@ -18,4 +18,5 @@ public interface CountryRepository extends JpaRepository<Country, String> {
 
 	@Query("SELECT new com.mmd.hr.dto.CountryAndJobDTOImpl(countryId as key, countryName as value) FROM Country")
 	List<CountryAndJobDTO> getCountryIdAndCountryName();
+
 }

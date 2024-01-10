@@ -11,7 +11,7 @@
 <body>
 <div th:insert="~{fragments/navbar :: navbar}"></div>
 <div class="container">
-    <p class="h3 mb-3">Employee Address</p>
+    <p class="h3 mb-3">Department Address</p>
     <hr>
 
     <table class="table table-bordered table-striped">
@@ -28,12 +28,12 @@
 
         <tbody>
         <tr>
-            <td th:text="${employeeAddress.locationId}"></td>
-            <td th:text="${employeeAddress.streetAddress}"></td>
-            <td th:text="${employeeAddress.postalCode}"></td>
-            <td th:text="${employeeAddress.city}"></td>
-            <td th:text="${employeeAddress.stateProvince}"></td>
-            <td th:text="${employeeAddress.countryId}"></td>
+            <td th:text="${departmentAddress.locationId}"></td>
+            <td th:text="${departmentAddress.streetAddress}"></td>
+            <td th:text="${departmentAddress.postalCode}"></td>
+            <td th:text="${departmentAddress.city}"></td>
+            <td th:text="${departmentAddress.stateProvince}"></td>
+            <td th:text="${departmentAddress.countryId}"></td>
         </tr>
         </tbody>
     </table>

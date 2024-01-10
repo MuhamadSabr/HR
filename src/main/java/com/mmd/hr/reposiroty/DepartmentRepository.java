@@ -2,6 +2,7 @@ package com.mmd.hr.reposiroty;
 
 import com.mmd.hr.dto.DepartmentDTO;
 import com.mmd.hr.entity.Department;
+import com.mmd.hr.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,8 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
 
 	@Query("SELECT new com.mmd.hr.dto.DepartmentDTOImpl(departmentId as key, departmentName as value) FROM Department")
 	List<DepartmentDTO> getDepartmentIdAndDepartmentName();
+
+	@Query("SELECT d FROM Department d JOIN FETCH d.address WHERE d.departmentId = :departmentId")
+	Department findDepartmentByDepartmentIdWithAddress(@Param("departmentId") int departmentId);
+
 }

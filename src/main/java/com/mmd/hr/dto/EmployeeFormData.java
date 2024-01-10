@@ -4,8 +4,6 @@ import com.mmd.hr.entity.Address;
 import com.mmd.hr.entity.Employee;
 import com.mmd.hr.validation.CommissionPct;
 import com.mmd.hr.validation.MinusOne;
-import com.mmd.hr.validation.NotExistingEmail;
-import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
@@ -22,11 +20,10 @@ public class EmployeeFormData {
 
 	@NotBlank(message = "Email is required")
 	@Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Invalid Email")
-	@NotExistingEmail
 	private String email;
 
 	@NotBlank(message = "Phone number is required")
-	@Pattern(regexp = "^\\d{1,3}\\s?\\d{1,4}[0-9]{6,15}$", message = "Invalid phone number")
+	@Pattern(regexp = "^\\d{1,3}\\s?\\d{1,4}[0-9]{6,15}$", message = "In 123 4567 890123 format")
 	private String phoneNumber;
 
 	@NotNull(message = "Hire date is required")
@@ -37,20 +34,20 @@ public class EmployeeFormData {
 	private String jobTitle;
 
 	@NotNull(message = "Salary is required")
-	@Pattern(regexp = "\\d{1,6}(\\.0*)?", message = "An amount of 6 digits is required")
+	@Pattern(regexp = "\\d{1,6}(\\.0*)?", message = "6 digits or less")
 	private String salary;
 
 
 	@CommissionPct
 	private Double commissionPct;
 
-	@MinusOne(value = "-1",message = "Manager ID is required")
+	@MinusOne(value = "-1",message = "Manager is required")
 	private String managerId;
 
-	@MinusOne(value = "-1",message = "Department name is required")
+	@MinusOne(value = "-1",message = "Department is required")
 	private String departmentName;
 
-	@NotNull(message = "Gender is required")
+	@NotNull(message = "MaritalStatus is required")
 	private String maritalStatus;
 
 	@Valid

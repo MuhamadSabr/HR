@@ -7,7 +7,8 @@
 </head>
 <body>
 
-<div class="container">
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+<div class="container-fluid">
     <p class="h3 mb-3">Employee List</p>
     <hr>
     <a sec:authorize="hasRole('MANAGER') || hasRole('ADMIN')" th:href="@{/employees/showEmployeeForm}" class="btn btn-primary  btn-sm mb-3">Add Employee</a>
