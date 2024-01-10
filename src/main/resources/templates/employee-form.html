@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+</head>
+<body>
+
+<div class="container">
+    <p class="h3 mb-3">New Employee</p>
+
+    <form th:action="@{/employees/saveEmployee}" method="POST" th:object="${employeeFormData}">
+
+        <div th:replace="~{fragments/error-fragment :: globalErrors}"></div>
+
+        <input type="hidden" th:field="*{employeeId}">
+        <input type="text" th:field="*{firstName}" placeholder="First name" class="form-control mb-4 w-25">
+
+
+        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color:red" class="text-sm-end"></span>
+        <input type="text" th:field="*{lastName}" placeholder="Last name" class="form-control w-25 mb-4">
+
+        <span th:if="${#fields.hasErrors('email')}" th:text="${#fields.errors('email')[0]}" style="color:red" class="text-sm-end"></span>
+        <input type="text" th:field="*{email}" placeholder="Email" class="form-control mb-4 w-25">
+
+        <span th:if="${#fields.hasErrors('phoneNumber')}" th:text="${#fields.errors('phoneNumber')[0]}" style="color:red" class="text-sm-end"></span>
+        <input type="tel" th:field="*{phoneNumber}" placeholder="Phone number" class="form-control mb-4 w-25">
+
+        <input type="text" id="hireDate" name="hireDate" class="form-control mb-4 w-25" th:value="${#temporals.format(employeeHireDate, 'yyyy-MM-dd')}">
+        <script th:inline="javascript">
+          flatpickr("#hireDate", {
+             dateFormat: "Y-m-d",
+             defaultDate: ["${#temporals.format(employeeHireDate, 'Y-m-d')}"],
+             enableTime: false, // if you don't want to include time
+           });
+        </script>
+
+
+        <span th:if="${#fields.hasErrors('jobTitle')}" th:errors="*{jobTitle}" style="color:red" class="text-sm-end"></span>
+       <select name="jobTitle" th:field="*{jobTitle}" class="form-select mb-4 w-25">
+            <option th:value="-1">Select Job Title</option>
+            <option th:each="job : ${jobsList}" th:value="${job}" th:text="${job}" th:selected="${employeeJobTitle==job}"></option>
+        </select>
+
+        <span th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" style="color:red" class="text-sm-end"></span>
+        <input type="text" th:field="*{salary}" placeholder="Salary" class="form-control mb-4 w-25">
+
+        <span th:if="${#fields.hasErrors('commissionPct')}" th:errors="*{commissionPct}" style="color:red" class="text-sm-end"></span>
+        <input type="text" th:field="*{commissionPct}" placeholder="Commission PCT" class="form-control mb-4 w-25">
+
+        <span th:if="${#fields.hasErrors('managerId')}" th:errors="*{managerId}" style="color:red" class="text-sm-end"></span>
+        <select th:field="*{managerId}" class="form-select mb-4 w-25">
+            <option th:value="-1">Select Manager ID</option>
+            <option th:each="empId : ${employeesListOfIds}" th:value="${empId}" th:text="${empId}"></option>
+        </select>
+
+        <span th:if="${#fields.hasErrors('departmentName')}" th:errors="*{departmentName}" style="color:red" class="text-sm-end"></span>
+        <select name="departmentName" th:field="*{departmentName}" class="form-select mb-4 w-25">
+            <option th:value="-1">Select Department</option>
+            <option th:each="department : ${departmentsList}" th:value="${department}"
+                    th:text="${department}"     th:selected="${employeeDepartmentName==department}"></option>
+        </select>
+
+        <input type="hidden" th:field="*{address.locationId}">
+        <input type="text" th:field="*{address.streetAddress}" placeholder="Street address" class="form-control mb-4 w-25">
+        <input type="text" th:field="*{address.postalCode}" placeholder="Postal code" class="form-control mb-4 w-25">
+
+        <span th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}" style="color:red" class="text-sm-end"></span>
+        <input type="text" th:field="*{address.city}" placeholder="City" class="form-control mb-4 w-25">
+
+        <input type="text" th:field="*{address.stateProvince}" placeholder="State province" class="form-control mb-4 w-25">
+
+        <select name="countryName" class="form-select mb-4 w-25">
+            <option th:value="-1">Select Country</option>
+            <option th:each="country : ${countriesList}" th:value="${country}"
+                    th:text="${country}"     th:selected="${employeeCountryName==country}"></option>
+        </select>
+
+        <span th:if="${#fields.hasErrors('maritalStatus')}" th:errors="*{maritalStatus}" style="color:red" class="text-sm-end"></span>
+        <th:block th:each="mStatus : ${maritalStatusList}">
+        <input type="radio" th:value="${mStatus}" th:id="${mStatus}" th:field="*{maritalStatus}"
+               th:checked="${maritalStatus==mStatus}" class="form-check-input">
+        <label th:text="${mStatus}" th:for="${mStatus}" class="form-check-label"></label>
+        </th:block><br><br>
+
+        <button type="submit" class="btn btn-info col-2">Save</button>
+        <hr>
+        <a th:href="@{/employees/}" class="link-underline-dark mb-4">
+            Back to Employees List
+        </a><br><br>
+    </form>
+
+</div>
+</body>
+</html>
