@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Job Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+</head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<div class="container">
+  <p class="h3 mb-3">New Job</p>
+
+  <form th:action="@{/jobs/saveJob}" method="POST" th:object="${job}">
+
+    <div th:replace="~{fragments/error-fragment :: globalErrors}"></div>
+
+    <span th:if="${#fields.hasErrors('jobId')}" th:errors="*{jobId}" style="color:red" class="text-sm-end"></span>
+    <input type="text" th:field="*{jobId}" placeholder="Job ID" class="form-control mb-4 w-25">
+
+    <span th:if="${#fields.hasErrors('jobTitle')}" th:errors="*{jobTitle}" style="color:red" class="text-sm-end"></span>
+    <input type="text" th:field="*{jobTitle}" placeholder="Job Title" class="form-control mb-4 w-25">
+
+    <input type="text" th:field="*{minSalary}" placeholder="Minimum Salary" class="form-control mb-4 w-25">
+    <input type="text" th:field="*{maxSalary}" placeholder="Maximum Salary" class="form-control mb-4 w-25">
+
+    <button type="submit" class="btn btn-info col-2">Save</button>
+    <hr>
+    <a th:href="@{/jobs/}" class="link-underline-dark mb-4">
+      Back to Jobs List
+    </a><br><br>
+  </form>
+
+</div>
+</body>
+</html>

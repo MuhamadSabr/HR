@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "jobs")
@@ -11,9 +12,11 @@ public class Job {
 
 	@Column(name = "job_id")
 	@Id
+	@NotBlank(message = "Job ID is Required")
 	private String jobId;
 
 	@Column(name = "job_title")
+	@NotBlank(message = "Job Title is Required")
 	private String jobTitle;
 
 	@Column(name = "min_salary")
