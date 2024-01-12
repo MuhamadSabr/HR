@@ -26,7 +26,7 @@ public class SecurityConfiguration {
 				.setUsersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username=?");
 
 		jdbcUserDetailsManager
-				.setAuthoritiesByUsernameQuery("SELECT user_id, role FROM roles WHERE user_id=?");
+				.setAuthoritiesByUsernameQuery("SELECT username, role FROM user_roles WHERE username=?");
 
 		return jdbcUserDetailsManager;
 	}

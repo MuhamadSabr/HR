@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>User Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+</head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<div class="container">
+  <p class="h3 mb-3">New User</p>
+
+  <form th:action="@{/users/updateUser}" method="POST" th:object="${userDTO}">
+
+    <div th:replace="~{fragments/error-fragment :: globalErrors}"></div>
+
+    <span th:if="${#fields.hasErrors('user.username')}" th:errors="*{user.username}" style="color:red" class="text-sm-end"></span>
+    <input type="text" th:field="*{user.username}" placeholder="Username" class="form-control mb-4 w-25" data-bs-toggle="tooltip" title="Cannot update username" readonly>
+
+
+    <select name="active" th:field="*{user.active}" class="form-select mb-4 w-25">
+      <option th:value="1" th:selected="${active==1}">Active</option>
+      <option th:value="0" th:selected="${active==0}">Blocked</option>
+    </select>
+
+    <span th:if="${#fields.hasErrors('rolesNames')}" th:errors="*{rolesNames}" style="color:red" class="text-sm-end"></span>
+    <select name="selectedRoles" th:field="*{rolesNames}" class="form-select mb-4 w-25" multiple>
+      <option th:each="role : ${RolesList}" th:value="${role.getRole}" th:text="${role.getRole}"
+              th:selected="${alreadySelectedRoles != null and alreadySelectedRoles.contains(role.getRole)}"></option>
+    </select>
+
+    <button type="submit" class="btn btn-info col-2">Save</button>
+    <hr>
+    <a th:href="@{/users/}" class="link-underline-dark mb-4">
+      Back to Users List
+    </a><br><br>
+  </form>
+
+</div>
+</body>
+</html>

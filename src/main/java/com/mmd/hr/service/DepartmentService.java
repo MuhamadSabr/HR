@@ -1,6 +1,6 @@
 package com.mmd.hr.service;
 
-import com.mmd.hr.dto.DepartmentDTO;
+import com.mmd.hr.dto.department.DepartmentDTO;
 import com.mmd.hr.entity.Department;
 import com.mmd.hr.reposiroty.DepartmentRepository;
 import org.springframework.stereotype.Repository;

@@ -1,8 +1,8 @@
 package com.mmd.hr.controller;
 
-import com.mmd.hr.dto.CountryAndJobDTO;
+import com.mmd.hr.dto.country.CountryAndJobDTO;
+import com.mmd.hr.dto.department.DepartmentWithEmployeeNumber;
 import com.mmd.hr.entity.Department;
-import com.mmd.hr.reposiroty.DepartmentRepository;
 import com.mmd.hr.service.CountryService;
 import com.mmd.hr.service.DepartmentService;
 import com.mmd.hr.service.EmployeeService;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/departments")
@@ -56,7 +55,10 @@ public class DepartmentController {
     public String getDepartments(Model model, HttpServletRequest request){
         List<Department> departments = departmentService.findAllDepartments();
         departments.sort(Comparator.comparing(Department::getDepartmentName));
-        model.addAttribute("departments", departments);
+        List<DepartmentWithEmployeeNumber> departmentsWithEmployeeNumber = new ArrayList<>();
+        departments.forEach(dep ->
+                departmentsWithEmployeeNumber.add(new DepartmentWithEmployeeNumber(dep, employeeService.findEmployeesByDepartmentId(dep.getDepartmentId()).size())));
+        model.addAttribute("departments", departmentsWithEmployeeNumber);
         model.addAttribute("currentURI", "/"+request.getRequestURI().split("/")[1]+"/");
         return departmentView;
     }

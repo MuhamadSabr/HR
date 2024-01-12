@@ -1,7 +1,8 @@
 package com.mmd.hr.controller;
 
-import com.mmd.hr.entity.Department;
+import com.mmd.hr.dto.job.JobWithEmployeeNumber;
 import com.mmd.hr.entity.Job;
+import com.mmd.hr.service.EmployeeService;
 import com.mmd.hr.service.JobService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -18,21 +20,25 @@ import java.util.List;
 public class JobController {
 
 	private JobService jobService;
+	private EmployeeService employeeService;
 
 
 	private final String jobView = "job";
 	private final String jobFormView = "job-form";
 	private final String redirectToJobPage = "redirect:/jobs/";
 
-	public JobController(JobService jobService) {
+	public JobController(JobService jobService, EmployeeService employeeService) {
 		this.jobService = jobService;
+		this.employeeService = employeeService;
 	}
 
 	@GetMapping("/")
 	public String getJobs(Model model, HttpServletRequest request){
 		List<Job> jobs = jobService.findAllJobs();
 		jobs.sort(Comparator.comparing(Job::getJobTitle));
-		model.addAttribute("jobs", jobs);
+		List<JobWithEmployeeNumber> jobsWithEmployeeNumber = new ArrayList<>();
+		jobs.forEach(job-> jobsWithEmployeeNumber.add(new JobWithEmployeeNumber(job, employeeService.findEmployeesByJobId(job.getJobId()).size())));
+		model.addAttribute("jobs", jobsWithEmployeeNumber);
 		model.addAttribute("currentURI", "/"+request.getRequestURI().split("/")[1]+"/");
 		return jobView;
 	}

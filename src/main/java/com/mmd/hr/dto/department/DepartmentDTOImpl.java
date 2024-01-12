@@ -1,4 +1,6 @@
-package com.mmd.hr.dto;
+package com.mmd.hr.dto.department;
+
+import com.mmd.hr.dto.department.DepartmentDTO;
 
 public class DepartmentDTOImpl implements DepartmentDTO {
 

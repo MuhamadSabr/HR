@@ -1,8 +1,8 @@
 package com.mmd.hr.controller;
 
-import com.mmd.hr.dto.CountryAndJobDTO;
-import com.mmd.hr.dto.DepartmentDTO;
-import com.mmd.hr.dto.EmployeeFormData;
+import com.mmd.hr.dto.country.CountryAndJobDTO;
+import com.mmd.hr.dto.department.DepartmentDTO;
+import com.mmd.hr.dto.employee.EmployeeFormData;
 import com.mmd.hr.entity.Employee;
 import com.mmd.hr.service.CountryService;
 import com.mmd.hr.service.DepartmentService;

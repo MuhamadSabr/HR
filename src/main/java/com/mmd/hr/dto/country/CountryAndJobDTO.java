@@ -1,4 +1,4 @@
-package com.mmd.hr.dto;
+package com.mmd.hr.dto.country;
 
 public interface CountryAndJobDTO {
 

@@ -1,4 +1,4 @@
-package com.mmd.hr.dto;
+package com.mmd.hr.dto.employee;
 
 import com.mmd.hr.entity.Address;
 import com.mmd.hr.entity.Employee;

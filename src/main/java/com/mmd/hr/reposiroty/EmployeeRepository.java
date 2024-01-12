@@ -18,4 +18,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 	@Query("SELECT email FROM Employee")
 	List<String> findAllEmails();
 
+	List<Employee> findEmployeesByJobId(String jobId);
+
+	List<Employee> findEmployeesByDepartmentId(int departmentId);
+
 }

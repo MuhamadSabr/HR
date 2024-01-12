@@ -1,9 +1,7 @@
 package com.mmd.hr.entity;
 
-import com.mmd.hr.dto.EmployeeFormData;
+import com.mmd.hr.dto.employee.EmployeeFormData;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 

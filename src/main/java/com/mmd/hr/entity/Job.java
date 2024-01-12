@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "jobs")
@@ -20,14 +21,16 @@ public class Job {
 	private String jobTitle;
 
 	@Column(name = "min_salary")
-	private Double minSalary;
+	@Pattern(regexp = "\\d{0,6}(\\.0*)?", message = "6 digits or less")
+	private String minSalary;
 
+	@Pattern(regexp = "\\d{0,6}(\\.0*)?", message = "6 digits or less")
 	@Column(name = "max_salary")
-	private Double maxSalary;
+	private String maxSalary;
 
 	public Job(){}
 
-	public Job(String jobId, String jobTitle, Double minSalary, Double maxSalary) {
+	public Job(String jobId, String jobTitle, String minSalary, String maxSalary) {
 		this.jobId = jobId;
 		this.jobTitle = jobTitle;
 		this.minSalary = minSalary;
@@ -50,19 +53,19 @@ public class Job {
 		this.jobTitle = jobTitle;
 	}
 
-	public Double getMinSalary() {
+	public String getMinSalary() {
 		return minSalary;
 	}
 
-	public void setMinSalary(Double minSalary) {
+	public void setMinSalary(String minSalary) {
 		this.minSalary = minSalary;
 	}
 
-	public Double getMaxSalary() {
+	public String getMaxSalary() {
 		return maxSalary;
 	}
 
-	public void setMaxSalary(Double maxSalary) {
+	public void setMaxSalary(String maxSalary) {
 		this.maxSalary = maxSalary;
 	}
 }

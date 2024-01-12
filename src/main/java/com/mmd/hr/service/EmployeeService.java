@@ -1,15 +1,7 @@
 package com.mmd.hr.service;
 
-import com.mmd.hr.dto.CountryAndJobDTO;
-import com.mmd.hr.dto.DepartmentDTO;
-import com.mmd.hr.entity.Country;
-import com.mmd.hr.entity.Department;
 import com.mmd.hr.entity.Employee;
-import com.mmd.hr.entity.Job;
-import com.mmd.hr.reposiroty.CountryRepository;
-import com.mmd.hr.reposiroty.DepartmentRepository;
 import com.mmd.hr.reposiroty.EmployeeRepository;
-import com.mmd.hr.reposiroty.JobRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,4 +48,8 @@ public class EmployeeService {
 	public List<String> findAllEmails() {
 		return employeeRepository.findAllEmails();
 	}
+
+	public List<Employee> findEmployeesByJobId(String jobId){return employeeRepository.findEmployeesByJobId(jobId);}
+
+	public List<Employee> findEmployeesByDepartmentId(int departmentId){return employeeRepository.findEmployeesByDepartmentId(departmentId);}
 }

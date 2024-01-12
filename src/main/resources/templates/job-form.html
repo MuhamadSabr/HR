@@ -24,7 +24,10 @@
     <span th:if="${#fields.hasErrors('jobTitle')}" th:errors="*{jobTitle}" style="color:red" class="text-sm-end"></span>
     <input type="text" th:field="*{jobTitle}" placeholder="Job Title" class="form-control mb-4 w-25">
 
+    <span th:if="${#fields.hasErrors('minSalary')}" th:errors="*{minSalary}" style="color:red" class="text-sm-end"></span>
     <input type="text" th:field="*{minSalary}" placeholder="Minimum Salary" class="form-control mb-4 w-25">
+
+    <span th:if="${#fields.hasErrors('maxSalary')}" th:errors="*{maxSalary}" style="color:red" class="text-sm-end"></span>
     <input type="text" th:field="*{maxSalary}" placeholder="Maximum Salary" class="form-control mb-4 w-25">
 
     <button type="submit" class="btn btn-info col-2">Save</button>

@@ -1,7 +1,6 @@
 package com.mmd.hr.service;
 
-import com.mmd.hr.dto.CountryAndJobDTO;
-import com.mmd.hr.entity.Department;
+import com.mmd.hr.dto.country.CountryAndJobDTO;
 import com.mmd.hr.entity.Job;
 import com.mmd.hr.reposiroty.JobRepository;
 import org.springframework.stereotype.Repository;

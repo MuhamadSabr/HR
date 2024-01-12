@@ -1,4 +1,6 @@
-package com.mmd.hr.dto;
+package com.mmd.hr.dto.country;
+
+import com.mmd.hr.dto.country.CountryAndJobDTO;
 
 public class CountryAndJobDTOImpl implements CountryAndJobDTO {
 
