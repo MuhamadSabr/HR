@@ -14,6 +14,7 @@ public class Job {
 	@Column(name = "job_id")
 	@Id
 	@NotBlank(message = "Job ID is Required")
+	@Pattern(regexp = "[\\d\\w_]{3,25}", message = "Must have between 3-25 characters, no special symbol except for underscore")
 	private String jobId;
 
 	@Column(name = "job_title")

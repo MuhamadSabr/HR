@@ -97,7 +97,7 @@ public class DepartmentController {
 
     @PostMapping(value = "/saveDepartment")
     public String saveDepartment(@Valid @ModelAttribute("department") Department department, BindingResult bindingResult, Model model,
-                                 @RequestParam("countryName") String countryName){
+                                 @RequestParam("countryName") String countryName, HttpServletRequest request){
         model.addAttribute("bindingResult: ", bindingResult);
         if(bindingResult.hasErrors()){
             model.addAttribute("employeesListOfIds", employeesListOfId);
@@ -114,7 +114,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/delete")
-    public String delete(@RequestParam("departmentId") int departmentId){
+    public String delete(@RequestParam("departmentId") int departmentId, HttpServletRequest request){
         Department department = departmentService.findDepartmentById(departmentId);
         if(department!=null){
             departmentService.delete(department);

@@ -68,7 +68,7 @@ public class UserController {
 	}
 
 	@PostMapping(value = "/saveUser")
-	public String saveUser(@Valid @ModelAttribute("userDTO") UserDTO userDTO, BindingResult bindingResult, Model model){
+	public String saveUser(@Valid @ModelAttribute("userDTO") UserDTO userDTO, BindingResult bindingResult, Model model, HttpServletRequest request){
 		model.addAttribute("bindingResult: ", bindingResult);
 		if(bindingResult.hasErrors()){
 			model.addAttribute("RolesList", roleService.findAllRoles());
@@ -81,7 +81,7 @@ public class UserController {
 	}
 
 	@PostMapping(value = "/updateUser")
-	public String updateUser(@Valid @ModelAttribute("userDTO") UserDTO userDTO, BindingResult bindingResult, Model model){
+	public String updateUser(@Valid @ModelAttribute("userDTO") UserDTO userDTO, BindingResult bindingResult, Model model, HttpServletRequest request){
 		model.addAttribute("bindingResult: ", bindingResult);
 		if(bindingResult.hasErrors()){
 			model.addAttribute("RolesList", roleService.findAllRoles());
@@ -96,7 +96,7 @@ public class UserController {
 	}
 
 	@DeleteMapping("/delete")
-	public String delete(@RequestParam("username") String username){
+	public String delete(@RequestParam("username") String username, HttpServletRequest request){
 		User user = userService.findUserByUsernameWithRoles(username);
 		if(user!=null){
 			user.setRoles(null);
@@ -114,8 +114,9 @@ public class UserController {
 	}
 
 	@PostMapping(value = "/updatePassword")
-	public String updateUserPassword(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model){
+	public String updateUserPassword(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, HttpServletRequest request){
 		model.addAttribute("bindingResult: ", bindingResult);
+		model.addAttribute("currentURI", "/"+request.getRequestURI().split("/")[1]+"/");
 		if(bindingResult.hasErrors()){
 			return passwordUpdateFormView;
 		}
